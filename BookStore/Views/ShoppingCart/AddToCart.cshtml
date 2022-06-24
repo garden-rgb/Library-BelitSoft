@@ -1,0 +1,15 @@
+﻿@using BookLibrary.Web.Models.CustomModels.ViewModel
+@model BookViewModel
+
+<div class="btn-addToCart">
+    <div class="Price"> <input readonly class="form-control" style="outline:none" id="bookTotal-@(Model.GetHashCode())" value="@Model.Total"></div>
+    @if(User.IsInRole("admin"))
+    {
+        <div class="Price">In Stock: @Model.InStock</div>
+    } 
+    <form asp-controller="ShoppingCart" asp-action="Add"  method="get" class="form-horizontal" role="form">
+        <div class="btn-cart">
+            <input value="Add to cart" type="submit" class="btn btn-success" asp-controller="ShoppingCart" asp-action="Add" asp-route-id="@Model.BookId" asp-route-amount="@Model.Amount">
+        </div>
+    </form>
+</div>

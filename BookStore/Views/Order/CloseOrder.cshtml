@@ -1,0 +1,29 @@
+﻿@using BookLibrary.Web.Models.CustomModels.ViewModel
+@model OrderViewModel
+
+@{
+    ViewData["Title"] = "Close";
+}
+
+<h1>Close order</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Order</h4>
+    <hr />
+    
+    <form asp-action="CloseOrder">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="City" />
+        <input type="hidden" asp-for="ZipCode" />
+        <input type="hidden" asp-for="ReturnDate" />
+        <input type="hidden" asp-for="OrderTotal" />
+        <input type="hidden" asp-for="UserId" />
+        <input type="hidden" asp-for="OrderPlaced" />
+        <input type="hidden" asp-for="Address" />
+        <input type="submit" value="Close" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
+
+

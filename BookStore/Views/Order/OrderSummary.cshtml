@@ -1,0 +1,26 @@
+﻿@using BookLibrary.Web.Models.CustomModels.ViewModel
+@model BookViewModel
+
+<div class="btn-addToCart">
+    <div class="categoryPrice"> <input readonly class="form-control" style="outline:none" id="bookTotal-@(Model.GetHashCode())" value="@Model.Total"></div>
+    @if(User.IsInRole("admin"))
+    {
+        <div class="categoryPrice">In Stock: @Model.InStock</div>
+    } 
+    <form asp-controller="ShoppingCart" asp-action="Add"  method="get" class="form-horizontal" role="form">
+        <a onclick="changeValue(document.getElementById('amount-input-'+@Model.BookId.ToString()), document.getElementById('bookTotal-@(Model.GetHashCode())'),'@Model.Total', 1)"><i class="fas fa-plus-circle"></i></a>
+        <input id="amount-input-@Model.BookId" asp-for="InStock" style="width:20%" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+        <a onclick="changeValue(document.getElementById('amount-input-'+@Model.BookId.ToString()),document.getElementById('bookTotal-@(Model.GetHashCode())'), '@Model.Total', -1)"><i class="fas fa-minus-circle"></i></a>
+        <div class="btn-cart">
+            <input value="Add to cart" type="submit" class="btn btn-success" asp-controller="ShoppingCart" asp-action="Add" asp-route-id="@Model.BookId" asp-route-amount="@Model.Amount" >
+        </div>
+    </form>
+</div>
+
+<div class="bookData">
+    <div class="bookName">
+        <a class="btn btn-info" asp-controller="Book" asp-action="Index" asp-route-id="@Model.BookId">
+            @Model.Title
+        </a>
+    </div>
+</div>

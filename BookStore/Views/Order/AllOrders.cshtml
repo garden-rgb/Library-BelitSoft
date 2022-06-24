@@ -1,0 +1,79 @@
+﻿@using BookLibrary.Web.Models.CustomModels.ViewModel
+@using System.Globalization
+@model IEnumerable<OrderViewModel>
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+<div class="container">
+    <div class="row">
+        <div class=col-md-8>
+            <div clas="panel panel-default">
+                <p>Latest orders</p>
+                @foreach(var line in Model)
+                {
+                        <div class="col-md-8 col-sm-12 pull-left posttimeline">
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" style="background-color: rgba(248,248,248,0.7)">
+                                        <h4 class="panel-title">
+                                            <p style="color:rgb(62, 80, 89)">Username: @line.UserId</p>
+                                        @if (line.IsReturned)
+                                        {
+                                            <p style="color:rgb(62, 80, 89)">Order is closed</p>
+                                        }
+                                        else
+                                        {
+                                            <p style="color:rgb(62, 80, 89)">Order is open</p>
+                                        
+                                        @if ((line.ReturnDate.Date - DateTime.UtcNow.Date).TotalDays < 0)
+                                        {
+                                            <p style="color:rgb(62, 80, 89)">Overdue by: @Math.Abs((line.ReturnDate.Date - DateTime.UtcNow.Date).TotalDays).ToString()</p>
+                                        }
+                                        else
+                                        {
+                                            <p style="color:rgb(62, 80, 89)">Days left: @Math.Abs((line.ReturnDate.Date - DateTime.UtcNow.Date).TotalDays).ToString()</p>
+                                        }
+                                        }
+                                        <div>
+                                                <a class="btn btn-primary" data-toggle="collapse" data-parent="#accordion" href="#collapse-@line.GetHashCode()">
+                                                    Details
+                                                </a>
+                                        </div>
+                                        @if(!line.IsReturned){
+                                        <a class="btn btn-danger" asp-controller="Order" asp-action="CloseOrder" asp-route-id="@line.Id">Close</a>
+                                        }    
+                                    </h4>
+                                    </div>
+                                    @foreach (var lines in line.OrderLines)
+                                    {
+                                    <div id="collapse-@line.GetHashCode()" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <table class="table table-bordered table-striped table-hover table-dark">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Selected amount</th>
+                                                        <th>Product</th>
+                                                        <th class="text-right">Price</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-center">@Html.DisplayName(lines.Quantity.ToString())</td>
+                                                        <td class="text-left"><a asp-controller="Home" asp-action="Index" asp-route-id="@lines.BookId">@Html.DisplayName(lines.Book.Title)</a></td>
+                                                        <td class="text-right">
+                                                            @Html.DisplayName((lines.Quantity * lines.Price).ToString())
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    }
+                                </div>
+                            </div> 
+                        </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

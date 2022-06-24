@@ -1,0 +1,104 @@
+﻿@using BookLibrary.Web.Models.CustomModels.ViewModel
+@using BookLibrary.Web.Models
+@model IEnumerable<BookViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>List Of Books</h1>
+
+<p>
+    @if (User.Identity.IsAuthenticated && User.IsInRole("librarian"))
+    {
+        <a asp-action="Create" class="btn btn-info btn-md">Create New</a>
+    }
+</p>
+
+<form asp-action="Index" method="get">
+    <p>
+        Search by title: <input type="text" name="SearchString" />
+    </p>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InStock)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in Model)
+        {
+            <tr>
+            <td>
+                @Html.DisplayFor(modelItem => book.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => book.Author)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => book.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => book.Price)
+            </td>
+                @if (User.IsInRole("reader"))
+                {
+                <td>
+                        @if (User.IsInRole("reader"))
+                        {
+                            if (@book.InStock > 0)
+                            {
+                             <p>
+                             In stock
+                             </p>
+                            }
+                            else
+                            {
+                            <p>
+                             Out stock
+                            </p>
+                        }
+                    }
+                </td>
+            }
+            <td>
+                    @if (User.IsInRole("librarian"))
+                    {
+                        @Html.DisplayFor(modelItem => book.InStock)
+                    }
+            </td>
+            <td>
+                    @if (User.IsInRole("reader"))
+                    {
+                        @if (book.InStock > 0){
+                        <a class="btn btn-info btn-md" asp-controller="ShoppingCart" asp-action="Add" asp-route-id="@book.BookId">Add to cart</a> 
+                        }
+                    }
+
+                    @if (User.IsInRole("librarian"))
+                    {
+                        <a class="btn btn-info btn-md" asp-action="Edit" asp-route-id="@book.BookId">Edit</a> 
+
+                        <a class="btn btn-danger btn-md" asp-action="Delete" asp-route-id="@book.BookId">Delete</a>
+                    }
+            </td>
+            </tr>
+        }
+        </tbody>
+     </table>

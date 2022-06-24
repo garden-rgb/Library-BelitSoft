@@ -1,0 +1,10 @@
+﻿@using BookLibrary.Web.Models.CustomModels.ViewModel
+@model ShoppingCartViewModel
+
+<a asp-area="" asp-controller="ShoppingCart" asp-action="Index" style="padding:5px;color: rgba(0,0,0,.7);text-decoration: none;">         
+    <div class="navbar-text navbar-right">
+        <b>Your cart:</b>
+        @Html.Raw(@Model.ShoppingCart.Items.Count()),
+        @Model.ShoppingCartTotal.ToString("# RUB");
+    </div>
+</a>
